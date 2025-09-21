@@ -1,0 +1,98 @@
+services:
+
+  service-public:
+    image: ghcr.io/bandwidth-gig-guide/service-public:latest
+    container_name: service-public
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${SERVICE_PUBLIC_DB_USER}
+      DB_PASSWORD: ${SERVICE_PUBLIC_DB_PASSWORD}
+      DB_NAME: ${SERVICE_PUBLIC_DB_NAME}
+    restart: unless-stopped
+    networks:
+      - internal
+
+  service-admin:
+    image: ghcr.io/bandwidth-gig-guide/service-admin:latest
+    container_name: service-admin
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${SERVICE_ADMIN_DB_USER}
+      DB_PASSWORD: ${SERVICE_ADMIN_DB_PASSWORD}
+      DB_NAME: ${SERVICE_ADMIN_DB_NAME}
+      NEXT_PUBLIC_KEYCLOAK_URL: ${KEYCLOAK_URL}
+      NEXT_PUBLIC_KEYCLOAK_REALM: ${KEYCLOAK_REALM}
+      NEXT_PUBLIC_KEYCLOAK_CLIENT_ID: ${SERVICE_ADMIN_KEYCLOAK_CLIENT_ID}
+    restart: unless-stopped
+    networks:
+      - internal
+
+  service-auth:
+    image: ghcr.io/bandwidth-gig-guide/service-auth:latest
+    container_name: service-auth
+    environment:
+      PROXY_ADDRESS_FORWARDING: "true"
+      KC_HOSTNAME: auth.bandwidth.melbourne
+      KC_PROXY: edge
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://${SERVICE_AUTH_DB_HOST}:${SERVICE_AUTH_DB_PORT}/${SERVICE_AUTH_DB_NAME}
+      KC_DB_USERNAME: ${SERVICE_AUTH_DB_USER}
+      KC_DB_PASSWORD: ${SERVICE_AUTH_DB_PASSWORD}
+      KEYCLOAK_ADMIN: ${SERVICE_AUTH_KEYCLOAK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${SERVICE_AUTH_KEYCLOAK_ADMIN_PASSWORD}
+    restart: unless-stopped
+    networks:
+      - internal
+
+  service-monitor:
+    build:
+      context: ./service-monitor
+      dockerfile: Dockerfile
+    container_name: service-monitor
+    volumes:
+      - service-monitor-data:/datastore
+      - /dev/shm:/dev/shm
+    restart: unless-stopped
+    networks:
+      - internal
+
+  website-main:
+    image: ghcr.io/bandwidth-gig-guide/website-main:latest
+    container_name: website-main
+    restart: unless-stopped
+    environment:
+      - NEXT_PUBLIC_API_URL=https://bandwidth.melbourne/public
+    networks:
+      - internal
+  website-admin:
+    image: ghcr.io/bandwidth-gig-guide/website-admin:latest
+    container_name: website-admin
+    restart: unless-stopped
+    environment:
+      - NEXT_PUBLIC_API_URL=https://admin.bandwidth.melbourne/admin
+    networks:
+      - internal
+  reverse-proxy:
+    build:
+      context: ./reverse-proxy
+      dockerfile: Dockerfile
+    container_name: reverse-proxy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ~/certs:/etc/nginx/certs:ro
+    networks:
+      - internal
+
+volumes:
+  db-main-data:
+  db-auth-data:
+  service-monitor-data:
+
+networks:
+  internal:
+    driver: bridge
