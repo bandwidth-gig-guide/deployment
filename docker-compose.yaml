@@ -57,13 +57,16 @@ services:
       - internal
 
   website-main:
-    image: ghcr.io/bandwidth-gig-guide/website-main:latest
+    build:
+      context: ./website-main
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: https://bandwidth.melbourne/public
     container_name: website-main
     restart: unless-stopped
-    environment:
-      - NEXT_PUBLIC_API_URL=https://bandwidth.melbourne/public
     networks:
       - internal
+
   website-admin:
     image: ghcr.io/bandwidth-gig-guide/website-admin:latest
     container_name: website-admin
@@ -72,6 +75,7 @@ services:
       - NEXT_PUBLIC_API_URL=https://admin.bandwidth.melbourne/admin
     networks:
       - internal
+
   reverse-proxy:
     build:
       context: ./reverse-proxy
