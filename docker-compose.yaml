@@ -57,13 +57,11 @@ services:
       - internal
 
   website-main:
-    build:
-      context: ./website-main
-      dockerfile: Dockerfile
-      args:
-        NEXT_PUBLIC_API_URL: https://bandwidth.melbourne/public
+    image: ghcr.io/bandwidth-gig-guide/website-main:latest
     container_name: website-main
     restart: unless-stopped
+    environment:
+      - NEXT_PUBLIC_API_URL=https://bandwidth.melbourne/public
     networks:
       - internal
 
