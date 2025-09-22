@@ -35,7 +35,7 @@ services:
     environment:
       KC_PROXY: edge
       KC_HOSTNAME: auth.bandwidth.melbourne
-      KC_HOSTNAME_STRICT: false
+      KC_HOSTNAME_STRICT: true
       KC_HOSTNAME_STRICT_HTTPS: true
       KC_HOSTNAME_STRICT_BACKCHANNEL: true
       KC_HOSTNAME_ADMIN_URL: https://auth.bandwidth.melbourne
