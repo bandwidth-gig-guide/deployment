@@ -29,22 +29,25 @@ services:
     networks:
       - internal
 
-  service-auth:
-    image: ghcr.io/bandwidth-gig-guide/service-auth:latest
-    container_name: service-auth
-    environment:
-      PROXY_ADDRESS_FORWARDING: "true"
-      KC_HOSTNAME: auth.bandwidth.melbourne
-      KC_PROXY: edge
-      KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://${SERVICE_AUTH_DB_HOST}:${SERVICE_AUTH_DB_PORT}/${SERVICE_AUTH_DB_NAME}
-      KC_DB_USERNAME: ${SERVICE_AUTH_DB_USER}
-      KC_DB_PASSWORD: ${SERVICE_AUTH_DB_PASSWORD}
-      KEYCLOAK_ADMIN: ${SERVICE_AUTH_KEYCLOAK_ADMIN}
-      KEYCLOAK_ADMIN_PASSWORD: ${SERVICE_AUTH_KEYCLOAK_ADMIN_PASSWORD}
-    restart: unless-stopped
-    networks:
-      - internal
+service-auth:
+  image: ghcr.io/bandwidth-gig-guide/service-auth:latest
+  container_name: service-auth
+  environment:
+    KC_PROXY: edge
+    KC_HOSTNAME: auth.bandwidth.melbourne
+    KC_HOSTNAME_STRICT: false
+    KC_HOSTNAME_STRICT_HTTPS: true
+    KC_HOSTNAME_ADMIN_URL: https://auth.bandwidth.melbourne
+    KC_HOSTNAME_URL: https://auth.bandwidth.melbourne
+    KC_DB: postgres
+    KC_DB_URL: jdbc:postgresql://${SERVICE_AUTH_DB_HOST}:${SERVICE_AUTH_DB_PORT}/${SERVICE_AUTH_DB_NAME}
+    KC_DB_USERNAME: ${SERVICE_AUTH_DB_USER}
+    KC_DB_PASSWORD: ${SERVICE_AUTH_DB_PASSWORD}
+    KEYCLOAK_ADMIN: ${SERVICE_AUTH_KEYCLOAK_ADMIN}
+    KEYCLOAK_ADMIN_PASSWORD: ${SERVICE_AUTH_KEYCLOAK_ADMIN_PASSWORD}
+  restart: unless-stopped
+  networks:
+    - internal
 
   service-monitor:
     image: ghcr.io/dgtlmoon/changedetection.io:latest
