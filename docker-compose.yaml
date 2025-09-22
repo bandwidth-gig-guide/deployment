@@ -34,12 +34,13 @@ services:
     container_name: service-auth
     environment:
       KC_PROXY: edge
+      PROXY_ADDRESS_FORWARDING: "true"
       KC_HOSTNAME: auth.bandwidth.melbourne
       KC_HOSTNAME_STRICT: true
       KC_HOSTNAME_STRICT_HTTPS: true
-      KC_HOSTNAME_STRICT_BACKCHANNEL: true
       KC_HOSTNAME_ADMIN_URL: https://auth.bandwidth.melbourne
       KC_HOSTNAME_URL: https://auth.bandwidth.melbourne
+      KC_FRONTEND_URL: https://auth.bandwidth.melbourne/
       KC_DB: postgres
       KC_DB_URL: jdbc:postgresql://${SERVICE_AUTH_DB_HOST}:${SERVICE_AUTH_DB_PORT}/${SERVICE_AUTH_DB_NAME}
       KC_DB_USERNAME: ${SERVICE_AUTH_DB_USER}
