@@ -65,8 +65,6 @@ services:
     image: ghcr.io/bandwidth-gig-guide/website-main:latest
     container_name: website-main
     restart: unless-stopped
-    environment:
-      - NEXT_PUBLIC_API_URL=https://bandwidth.melbourne/public
     networks:
       - internal
 
@@ -74,8 +72,6 @@ services:
     image: ghcr.io/bandwidth-gig-guide/website-admin:latest
     container_name: website-admin
     restart: unless-stopped
-    environment:
-      - NEXT_PUBLIC_API_URL=https://admin.bandwidth.melbourne/admin
     networks:
       - internal
 
