@@ -1,0 +1,31 @@
+{
+	storage file_system /data
+}
+
+bandwidth.melbourne {
+    reverse_proxy website-main:3000
+
+    handle /public/* {
+        reverse_proxy service-public:80
+    }
+}
+
+admin.bandwidth.melbourne {
+    reverse_proxy website-admin:3000
+
+    handle /admin/* {
+        reverse_proxy service-admin:80
+    }
+}
+
+auth.bandwidth.melbourne {
+    reverse_proxy service-auth:8080
+}
+
+monitor.bandwidth.melbourne {
+    reverse_proxy service-monitor:5000
+}
+
+127.0.0.1:8080 {
+	respond "Health OK" 200
+}
