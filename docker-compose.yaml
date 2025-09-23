@@ -76,20 +76,29 @@ services:
       - bandwidth
 
   reverse-proxy:
-    build:
-      context: ./reverse-proxy
-      dockerfile: Dockerfile
+    image: caddy:2-alpine
     container_name: reverse-proxy
     restart: unless-stopped
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - ~/certs:/etc/nginx/certs:ro
+      - ./reverse-proxy-data:/data
+      - ./reverse-proxy-config:/config
+      - ./prod.Caddyfile:/etc/caddy/Caddyfile
+    depends_on:
+      - website-main
+      - website-admin
+      - service-public
+      - service-auth
+      - service-admin
+      - service-monitor
     networks:
       - bandwidth
 
 volumes:
+  reverse-proxy-data:
+  reverse-proxy-config:
   service-monitor-data:
 
 networks:
