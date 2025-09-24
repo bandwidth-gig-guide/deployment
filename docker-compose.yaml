@@ -66,7 +66,7 @@ services:
       - service-playwright
 
   service-playwright:
-    image: ghcr.io/dgtlmoon/changedetection-playwright:latest
+    image: browserless/chrome
     container_name: service-playwright
     restart: unless-stopped
     networks:
