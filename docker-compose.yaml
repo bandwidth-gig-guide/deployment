@@ -63,7 +63,7 @@ services:
     networks:
       - bandwidth
     depends_on:
-      - playwright
+      - service-playwright
 
   service-playwright:
     image: ghcr.io/dgtlmoon/changedetection-playwright:latest
