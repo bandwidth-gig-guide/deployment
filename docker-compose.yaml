@@ -51,6 +51,15 @@ services:
     networks:
       - bandwidth
 
+  service-playwright:
+    image: browserless/chrome
+    container_name: service-playwright
+    restart: unless-stopped
+    networks:
+      - bandwidth
+    expose:
+      - "3000"
+
   service-monitor:
     image: ghcr.io/dgtlmoon/changedetection.io:latest
     container_name: service-monitor
@@ -64,15 +73,6 @@ services:
       - bandwidth
     depends_on:
       - service-playwright
-
-  service-playwright:
-    image: browserless/chrome
-    container_name: service-playwright
-    restart: unless-stopped
-    networks:
-      - bandwidth
-    expose:
-      - "3000"
 
   website-main:
     image: ghcr.io/bandwidth-gig-guide/website-main:latest
