@@ -1,5 +1,5 @@
-services:
-
+services: 
+  
   service-public:
     image: ghcr.io/bandwidth-gig-guide/service-public:latest
     container_name: service-public
@@ -30,24 +30,30 @@ services:
       - bandwidth
 
   service-auth:
-    image: ghcr.io/bandwidth-gig-guide/service-auth:latest
+    image: quay.io/keycloak/keycloak:25.0.2
     container_name: service-auth
+    command:
+      - start
     environment:
       KC_PROXY: edge
-      PROXY_ADDRESS_FORWARDING: "true"
+      KC_PROXY_HEADER: xforwarded
       KC_HOSTNAME: auth.bandwidth.melbourne
-      KC_HOSTNAME_STRICT: true
-      KC_HOSTNAME_STRICT_HTTPS: true
+      KC_HOSTNAME_STRICT: "true"
+      KC_HOSTNAME_STRICT_HTTPS: "true"
       KC_HOSTNAME_ADMIN_URL: https://auth.bandwidth.melbourne
       KC_HOSTNAME_URL: https://auth.bandwidth.melbourne
-      KC_FRONTEND_URL: https://auth.bandwidth.melbourne/
+      KC_FRONTEND_URL: https://auth.bandwidth.melbourne
       KC_DB: postgres
       KC_DB_URL: jdbc:postgresql://${SERVICE_AUTH_DB_HOST}:${SERVICE_AUTH_DB_PORT}/${SERVICE_AUTH_DB_NAME}
       KC_DB_USERNAME: ${SERVICE_AUTH_DB_USER}
       KC_DB_PASSWORD: ${SERVICE_AUTH_DB_PASSWORD}
       KEYCLOAK_ADMIN: ${SERVICE_AUTH_KEYCLOAK_ADMIN}
       KEYCLOAK_ADMIN_PASSWORD: ${SERVICE_AUTH_KEYCLOAK_ADMIN_PASSWORD}
+      KC_HEALTH_ENABLED: "true"
+      KC_METRICS_ENABLED: "true"
     restart: unless-stopped
+    volumes:
+      - service-auth-data:/opt/keycloak/data
     networks:
       - bandwidth
 
@@ -109,11 +115,12 @@ services:
     networks:
       - bandwidth
 
-volumes:
-  reverse-proxy-data:
-  reverse-proxy-config:
-  service-monitor-data:
+  volumes:
+    reverse-proxy-data:
+    reverse-proxy-config:
+    service-auth-data:
+    service-monitor-data:
 
-networks:
-  bandwidth:
-    driver: bridge
+  networks:
+    bandwidth:
+      driver: bridge
