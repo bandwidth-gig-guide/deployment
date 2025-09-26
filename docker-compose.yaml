@@ -115,12 +115,12 @@ services:
     networks:
       - bandwidth
 
-  volumes:
-    reverse-proxy-data:
-    reverse-proxy-config:
-    service-auth-data:
-    service-monitor-data:
+volumes:
+  reverse-proxy-data:
+  reverse-proxy-config:
+  service-auth-data:
+  service-monitor-data:
 
-  networks:
-    bandwidth:
-      driver: bridge
+networks:
+  bandwidth:
+    driver: bridge
