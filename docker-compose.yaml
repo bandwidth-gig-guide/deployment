@@ -104,7 +104,7 @@ services:
     volumes:
       - ./reverse-proxy-data:/data
       - ./reverse-proxy-config:/config
-      - ./prod.Caddyfile:/etc/caddy/Caddyfile
+      - ./Caddyfile:/etc/caddy/Caddyfile
     depends_on:
       - website-main
       - website-admin
