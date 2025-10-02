@@ -1,0 +1,30 @@
+name: Update Production Deployment
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  PATH_IN_VM: deployment/
+
+jobs:
+  deploy:
+    name: Update Production Deployment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git & Docker Pull
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DO_HOST }}
+          username: ${{ secrets.DO_USER }}
+          key: ${{ secrets.DO_SSH_KEY }}
+          script: |
+            cd ${{ env.PATH_IN_VM }}
+            git pull
+            docker compose pull
+            docker compose up -d --remove-orphans
+            docker image prune -af || true
