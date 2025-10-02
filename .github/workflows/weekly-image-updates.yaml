@@ -1,0 +1,28 @@
+name: Weekly Image Updates
+
+on:
+  schedule:
+    - cron: "0 20 * * 0"  # Runs every Monday at 6am Melbourne time (AEST/AEDT)
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  PATH_IN_VM: deployment/
+
+jobs:
+  update-images:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update Docker images on server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DO_HOST }}
+          username: ${{ secrets.DO_USER }}
+          key: ${{ secrets.DO_SSH_KEY }}
+          script: |
+            cd ${{ env.PATH_IN_VM }}
+            docker compose pull
+            docker compose up -d --remove-orphans
+            docker image prune -af || true
