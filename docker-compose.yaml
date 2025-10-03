@@ -57,28 +57,15 @@ services:
     networks:
       - bandwidth
 
-  service-playwright:
-    image: browserless/chrome
-    container_name: service-playwright
-    restart: unless-stopped
-    networks:
-      - bandwidth
-    expose:
-      - "3000"
-
   service-monitor:
     image: ghcr.io/dgtlmoon/changedetection.io:latest
     container_name: service-monitor
     volumes:
       - service-monitor-data:/datastore
       - /dev/shm:/dev/shm
-    environment:
-      - PLAYWRIGHT_DRIVER_URL=ws://service-playwright:3000
     restart: unless-stopped
     networks:
       - bandwidth
-    depends_on:
-      - service-playwright
 
   website-main:
     image: ghcr.io/bandwidth-gig-guide/website-main:latest
