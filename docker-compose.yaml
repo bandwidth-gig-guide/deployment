@@ -34,21 +34,17 @@ services:
     container_name: service-auth
     command:
       - start
+      - --http-enabled=true
+      - --hostname=auth.bandwidth.melbourne
+      - --hostname-strict=false
+      - --proxy-headers=xforwarded
     environment:
-      KC_PROXY: edge
-      KC_PROXY_HEADER: xforwarded
-      KC_HOSTNAME: auth.bandwidth.melbourne
-      KC_HOSTNAME_STRICT: "true"
-      KC_HOSTNAME_STRICT_HTTPS: "true"
-      KC_HOSTNAME_ADMIN_URL: https://auth.bandwidth.melbourne
-      KC_HOSTNAME_URL: https://auth.bandwidth.melbourne
-      KC_FRONTEND_URL: https://auth.bandwidth.melbourne
       KC_DB: postgres
       KC_DB_URL: jdbc:postgresql://${SERVICE_AUTH_DB_HOST}:${SERVICE_AUTH_DB_PORT}/${SERVICE_AUTH_DB_NAME}
       KC_DB_USERNAME: ${SERVICE_AUTH_DB_USER}
       KC_DB_PASSWORD: ${SERVICE_AUTH_DB_PASSWORD}
-      KEYCLOAK_ADMIN: ${SERVICE_AUTH_KEYCLOAK_ADMIN}
-      KEYCLOAK_ADMIN_PASSWORD: ${SERVICE_AUTH_KEYCLOAK_ADMIN_PASSWORD}
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${SERVICE_AUTH_KEYCLOAK_ADMIN}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${SERVICE_AUTH_KEYCLOAK_ADMIN_PASSWORD}
       KC_HEALTH_ENABLED: "true"
       KC_METRICS_ENABLED: "true"
     restart: unless-stopped
