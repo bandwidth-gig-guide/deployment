@@ -100,9 +100,33 @@ services:
 
 volumes:
   reverse-proxy-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /mnt/volume_syd1_01/docker/reverse-proxy-data
+      o: bind
+
   reverse-proxy-config:
+    driver: local
+    driver_opts:
+      type: none
+      device: /mnt/volume_syd1_01/docker/reverse-proxy-config
+      o: bind
+
   service-auth-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /mnt/volume_syd1_01/docker/service-auth-data
+      o: bind
+
   service-monitor-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /mnt/volume_syd1_01/docker/service-monitor-data
+      o: bind
+
 
 networks:
   bandwidth:
