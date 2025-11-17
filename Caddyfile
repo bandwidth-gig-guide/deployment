@@ -3,27 +3,28 @@
 }
 
 bandwidth.melbourne {
-    handle_path /api/* {
-        reverse_proxy service-public:80
-    }
+	handle_path /api/* {
+		reverse_proxy service-public:80
+	}
 
-    reverse_proxy website-main:3000
+	reverse_proxy website-main:3000
 }
 
 admin.bandwidth.melbourne {
-    handle_path /api/* {
-        reverse_proxy service-admin:80
-    }
+	handle_path /api/* {
+		reverse_proxy service-admin:80
+	}
 
-    reverse_proxy website-admin:3000
+	reverse_proxy website-admin:3000
 }
 
 auth.bandwidth.melbourne {
-    reverse_proxy service-auth:8080
+	reverse_proxy service-auth:8080
 }
 
+monitor.bandwidthmelbourne.com,
 monitor.bandwidth.melbourne {
-    reverse_proxy service-monitor:5000
+	reverse_proxy service-monitor:5000
 }
 
 127.0.0.1:8080 {
