@@ -30,6 +30,9 @@ monitor.bandwidth.melbourne {
 	reverse_proxy service-monitor:5000
 }
 
+filebrowser.bandwidthmelbourne.com {
+	reverse_proxy filebrowser:80
+}
 127.0.0.1:8080 {
 	respond "Health OK" 200
 }
