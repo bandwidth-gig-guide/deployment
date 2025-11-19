@@ -77,6 +77,18 @@ services:
     networks:
       - bandwidth
 
+  filebrowser:
+    image: filebrowser/filebrowser:latest
+    container_name: filebrowser
+    user: "0:0"
+    volumes:
+    - /mnt/volume_syd1_01:/data
+    - ./filebrowser.db:/database/filebrowser.db
+    - ./filebrowser-settings.json:/config/settings.json
+    restart: unless-stopped
+    networks:
+    - bandwidth
+
   reverse-proxy:
     image: caddy:2-alpine
     container_name: reverse-proxy
@@ -95,6 +107,7 @@ services:
       - service-auth
       - service-admin
       - service-monitor
+      - filebrowser
     networks:
       - bandwidth
 
