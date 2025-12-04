@@ -48,7 +48,7 @@ services:
     command:
       - start
       - --http-enabled=true
-      - --hostname=auth.bandwidth.melbourne
+      - --hostname=auth.bandwidthmelbourne.com
       - --hostname-strict=false
       - --proxy-headers=xforwarded
     environment:
