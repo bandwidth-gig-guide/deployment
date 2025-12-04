@@ -4,7 +4,7 @@
 
 bandwidthmelbourne.com,
 bandwidth.melbourne {
-	handle_path /api/search/* {
+	handle_path /api/search* {
 		reverse_proxy service-search:80
 	}
 
@@ -17,7 +17,7 @@ bandwidth.melbourne {
 
 admin.bandwidthmelbourne.com,
 admin.bandwidth.melbourne {
-	handle_path /api/search/* {
+	handle_path /api/search* {
 		reverse_proxy service-search:80
 	}
 
