@@ -29,6 +29,19 @@ services:
     networks:
       - bandwidth
 
+  service-search:
+    image: ghcr.io/bandwidth-gig-guide/service-search:latest
+    container_name: service-search
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${SERVICE_PUBLIC_DB_USER} # Publicly available, so can use public db account.
+      DB_PASSWORD: ${SERVICE_PUBLIC_DB_PASSWORD}
+      DB_NAME: ${SERVICE_PUBLIC_DB_NAME}
+    restart: unless-stopped
+    networks:
+      - bandwidth
+
   service-auth:
     image: quay.io/keycloak/keycloak:latest
     container_name: service-auth
@@ -106,6 +119,7 @@ services:
       - service-public
       - service-auth
       - service-admin
+      - service-search
       - service-monitor
       - filebrowser
     networks:
