@@ -2,8 +2,7 @@
 	storage file_system /data
 }
 
-bandwidthmelbourne.com,
-bandwidth.melbourne {
+bandwidthmelbourne.com {
 	handle_path /api/search* {
 		reverse_proxy service-search:80
 	}
@@ -15,8 +14,7 @@ bandwidth.melbourne {
 	reverse_proxy website-main:3000
 }
 
-admin.bandwidthmelbourne.com,
-admin.bandwidth.melbourne {
+admin.bandwidthmelbourne.com {
 	handle_path /api/search* {
 		reverse_proxy service-search:80
 	}
@@ -28,13 +26,11 @@ admin.bandwidth.melbourne {
 	reverse_proxy website-admin:3000
 }
 
-auth.bandwidthmelbourne.com,
-auth.bandwidth.melbourne {
+auth.bandwidthmelbourne.com {
 	reverse_proxy service-auth:8080
 }
 
-monitor.bandwidthmelbourne.com,
-monitor.bandwidth.melbourne {
+monitor.bandwidthmelbourne.com {
 	reverse_proxy service-monitor:5000
 }
 
