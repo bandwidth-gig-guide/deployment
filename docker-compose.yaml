@@ -1,4 +1,22 @@
 services: 
+
+  cache:
+    image: redis:7-alpine
+    container_name: cache
+    command: ["redis-server", "--appendonly", "yes"]
+    restart: unless-stopped
+    volumes:
+      - cache-data:/data
+    networks:
+      - bandwidth
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
   
   service-public:
     image: ghcr.io/bandwidth-gig-guide/service-public:latest
@@ -9,6 +27,8 @@ services:
       DB_USER: ${SERVICE_PUBLIC_DB_USER}
       DB_PASSWORD: ${SERVICE_PUBLIC_DB_PASSWORD}
       DB_NAME: ${SERVICE_PUBLIC_DB_NAME}
+      REDIS_HOST: cache
+      REDIS_PORT: 6379
     restart: unless-stopped
     networks:
       - bandwidth
@@ -25,6 +45,8 @@ services:
       NEXT_PUBLIC_KEYCLOAK_URL: ${KEYCLOAK_URL}
       NEXT_PUBLIC_KEYCLOAK_REALM: ${KEYCLOAK_REALM}
       NEXT_PUBLIC_KEYCLOAK_CLIENT_ID: ${SERVICE_ADMIN_KEYCLOAK_CLIENT_ID}
+      REDIS_HOST: cache
+      REDIS_PORT: 6379
     restart: unless-stopped
     networks:
       - bandwidth
@@ -38,6 +60,8 @@ services:
       DB_USER: ${SERVICE_PUBLIC_DB_USER} # Publicly available, so can use public db account.
       DB_PASSWORD: ${SERVICE_PUBLIC_DB_PASSWORD}
       DB_NAME: ${SERVICE_PUBLIC_DB_NAME}
+      REDIS_HOST: cache
+      REDIS_PORT: 6379
     restart: unless-stopped
     networks:
       - bandwidth
@@ -113,6 +137,8 @@ services:
       - bandwidth
 
 volumes:
+  cache-data:
+
   reverse-proxy-data:
     driver: local
     driver_opts:
